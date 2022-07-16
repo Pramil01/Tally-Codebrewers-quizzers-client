@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 
-const Question = ({ Ques, optA, optB, optC, optD, id }) => {
+const Question = ({ Ques, correctOp, optA, optB, optC, optD, id }) => {
   return (
     <>
       <Grid item xs={12}>
@@ -18,6 +18,9 @@ const Question = ({ Ques, optA, optB, optC, optD, id }) => {
       </Grid>
       <Grid item xs={6}>
         D. {optD}
+      </Grid>
+      <Grid item xs={6}>
+        Correct Option: {correctOp}
       </Grid>
     </>
   );

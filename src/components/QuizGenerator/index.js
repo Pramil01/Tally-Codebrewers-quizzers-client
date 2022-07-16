@@ -5,6 +5,10 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 // import FormHelperText from "@mui/material/FormHelperText";
 // import Input from "@mui/material/Input";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -12,9 +16,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { v4 as uuid } from "uuid";
 import Question from "./Question";
+import { useNavigate } from "react-router-dom";
 import api from "../../service/api";
 
 const QuizGenerator = () => {
+  let navigate = useNavigate();
   const [data, setData] = useState({
     quizName: "",
     startTime: new Date(),
@@ -29,6 +35,7 @@ const QuizGenerator = () => {
     optB: "",
     optC: "",
     optD: "",
+    correctOp: "",
   });
 
   const [quesArr, setQuesArr] = useState([]);
@@ -51,22 +58,31 @@ const QuizGenerator = () => {
         optB={qData.optB}
         optC={qData.optC}
         optD={qData.optD}
+        correctOp={qData.correctOp}
       />,
     ]);
     setQArrData([...qArrData, qData]);
-    setQData({ ques: "", optA: "", optB: "", optC: "", optD: "" });
+    setQData({
+      ques: "",
+      optA: "",
+      optB: "",
+      optC: "",
+      optD: "",
+      correctOp: "",
+    });
   };
 
   const handleSubmit = () => {
     const totalData = {
       qId: uuid(),
       questions: [data, qArrData],
+      admin: localStorage.getItem("Admin"),
     };
     console.log(totalData);
     api
       .post("ques/", totalData)
       .then((res) => {
-        alert(res.data);
+        navigate("/adminWindow");
       })
       .catch((err) => {
         console.log(err);
@@ -189,6 +205,23 @@ const QuizGenerator = () => {
             name="optD"
             onChange={handleQChange}
           />
+        </FormControl>
+      </Grid>
+      <Grid item xs={6}>
+        <FormControl>
+          <FormLabel id="correct-ans">Correct Option</FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="correct-ans"
+            name="correctOp"
+            value={qData.correctOp}
+            onChange={handleQChange}
+          >
+            <FormControlLabel value="A" control={<Radio />} label="A" />
+            <FormControlLabel value="B" control={<Radio />} label="B" />
+            <FormControlLabel value="C" control={<Radio />} label="C" />
+            <FormControlLabel value="D" control={<Radio />} label="D" />
+          </RadioGroup>
         </FormControl>
       </Grid>
       <Grid item xs={12}>

@@ -57,6 +57,7 @@ const Auth = () => {
       .then((res) => {
         console.log(res);
         setRedirect(true);
+        localStorage.setItem("Admin", username);
       })
       .catch((err) => {
         console.log(err.response);
@@ -87,6 +88,7 @@ const Auth = () => {
       .then((res) => {
         console.log(res);
         setRedirect(true);
+        localStorage.setItem("Admin", username);
       })
       .catch((err) => {
         console.log(err.response);
