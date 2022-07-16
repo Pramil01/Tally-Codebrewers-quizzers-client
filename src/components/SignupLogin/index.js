@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 //Style Sheet
 import "./style.css";
@@ -12,6 +13,7 @@ import api from "../../service/api";
 
 const Auth = () => {
   const [toggler, setToggler] = useState(true);
+  const [redirect, setRedirect] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
@@ -54,6 +56,7 @@ const Auth = () => {
       })
       .then((res) => {
         console.log(res);
+        setRedirect(true);
       })
       .catch((err) => {
         console.log(err.response);
@@ -83,6 +86,7 @@ const Auth = () => {
       })
       .then((res) => {
         console.log(res);
+        setRedirect(true);
       })
       .catch((err) => {
         console.log(err.response);
@@ -101,43 +105,45 @@ const Auth = () => {
   };
   return (
     <>
-      <div className="content">
-        <div className="container cont1"></div>
-        <div className="container cont2">
-          {toggler && (
-            <div className="login" id="loginid">
-              <h1>LOGIN</h1>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username"
-                required
-              />
-              <br />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                required
-              />
-              <br />
-              {/* <div className="enquire">
+      {redirect && <Navigate to="/adminWindow" />}
+      <div className="outerContainer">
+        <div className="content">
+          <div className="container cont1"></div>
+          <div className="container cont2">
+            {toggler && (
+              <div className="login" id="loginid">
+                <h1>LOGIN</h1>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Username"
+                  required
+                />
+                <br />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  required
+                />
+                <br />
+                {/* <div className="enquire">
             <a href="/">
               <input type="checkbox" />
               Remember me
             </a>
             <a href="/">Forgot Password?</a>
           </div> */}
-              <button className="btn btn1" onClick={logIn}>
-                LOGIN
-              </button>
-              <br />
-              {/* <div className="or">
+                <button className="btn btn1" onClick={logIn}>
+                  LOGIN
+                </button>
+                <br />
+                {/* <div className="or">
             <h1>OR</h1>
           </div> */}
-              {/* <div className="option">
+                {/* <div className="option">
             <button className="media media1">Login with Facebook</button>
             <br />
             <button className="media media2">Login with Google</button>
@@ -145,60 +151,60 @@ const Auth = () => {
             <button className="media media3">Login with Github</button>
             <br />
           </div> */}
-              <div className="ask" onClick={toggle}>
-                No account? Create one, Click Here !!!
+                <div className="ask" onClick={toggle}>
+                  No account? Create one, Click Here !!!
+                </div>
+                <br />
               </div>
-              <br />
-            </div>
-          )}
-          {!toggler && (
-            <div className="signup" id="signupid">
-              <h1>Create Account</h1>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                required
-              />
-              <br />
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username"
-                required
-              />
-              <br />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                required
-              />
-              <br />
-              <input
-                type="password"
-                value={cpassword}
-                onChange={(e) => setCPassword(e.target.value)}
-                placeholder="Confirm password"
-                required
-              />
-              <br />
-              {/* <a href="/">
+            )}
+            {!toggler && (
+              <div className="signup" id="signupid">
+                <h1>Create Account</h1>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email"
+                  required
+                />
+                <br />
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Username"
+                  required
+                />
+                <br />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  required
+                />
+                <br />
+                <input
+                  type="password"
+                  value={cpassword}
+                  onChange={(e) => setCPassword(e.target.value)}
+                  placeholder="Confirm password"
+                  required
+                />
+                <br />
+                {/* <a href="/">
             <input type="checkbox" /> I agree to Terms and Conditions and
             Privacy Policy.
           </a> */}
-              <br />
-              <button className="btn btn3" onClick={signUp}>
-                CREATE ACCOUNT
-              </button>
-              <br />
-              <div className="ask" onClick={toggle}>
-                Already have an account. Click Here !!!
-              </div>
-              {/* <div className="or">
+                <br />
+                <button className="btn btn3" onClick={signUp}>
+                  CREATE ACCOUNT
+                </button>
+                <br />
+                <div className="ask" onClick={toggle}>
+                  Already have an account. Click Here !!!
+                </div>
+                {/* <div className="or">
             <h1>OR</h1>
           </div>
           <div className="option">
@@ -209,8 +215,9 @@ const Auth = () => {
             <button className="media media3">Login with Github</button>
             <br /> 
           </div>*/}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <ToastContainer

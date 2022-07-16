@@ -7,7 +7,7 @@
   margin: 0;
   box-sizing: border-box;
 }
-body {
+.outerContainer {
   min-height: 100vh;
   width: 100%;
   background: linear-gradient(35deg, #f9f9f9 50%, #cdf0ea 50%);
@@ -36,7 +36,7 @@ body {
 }
 .cont2 {
   width: 520px;
-  height: 600px;
+  height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -140,6 +140,7 @@ a {
     flex-direction: column;
   }
   .container {
+    margin-top: 20px;
     width: 350px;
   }
   .cont1 {
