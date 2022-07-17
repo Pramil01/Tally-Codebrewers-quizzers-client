@@ -55,9 +55,16 @@ export default function WithinTime({ data, qId }) {
 
   const [options, setOptions] = useState({});
   const ref = useRef();
+  const timerRef = useRef();
+  const btnRef = useRef();
   const handleStart = () => {
     if (!name || !email) {
       ref.current.innerText = "Please fill all the fields first !!!";
+      return;
+    }
+    var emailcheck = /^[A-Za-z0-9]{3,}[@]{1}[A-Za-z]{3,}[.]{1}[A-Za-z]{2,6}$/;
+    if (!emailcheck.test(email)) {
+      showToast("Invalid Email Address !!");
       return;
     }
     if (!check) {
@@ -71,6 +78,7 @@ export default function WithinTime({ data, qId }) {
       .post("scores/", { name, email, qId })
       .then((res) => {
         setSubmitted(true);
+        startTimer();
       })
       .catch((err) => {
         showToast(err.response.data.msg);
@@ -79,6 +87,48 @@ export default function WithinTime({ data, qId }) {
 
   const handleChange = (e) => {
     setOptions({ ...options, [e.target.name]: e.target.value });
+  };
+
+  const startTimer = () => {
+    var duration =
+      data[0].timeD * 24 * 60 * 60 +
+      data[0].timeH * 60 * 60 +
+      data[0].timeM * 60;
+    var timer = duration,
+      days = data[0].timeD,
+      hours = data[0].timeH,
+      minutes = data[0].timeM,
+      seconds;
+    var dayCheck = data[0].timeD === 0;
+    setInterval(function () {
+      seconds = parseInt(timer % 60, 10);
+
+      if (seconds === 0 && minutes !== 0) {
+        minutes -= 1;
+      }
+      if (minutes === 0 && hours !== 0) {
+        hours -= 1;
+        minutes = 59;
+      }
+      if (hours === 0 && days !== 0) {
+        days -= 1;
+        hours = 23;
+        minutes = 59;
+      }
+
+      days = days <= 0 ? "00" : days < 10 ? "0" + days : days;
+      hours = hours <= 0 ? "00" : hours < 10 ? "0" + parseInt(hours) : hours;
+      minutes = minutes <= 0 ? "00" : minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      timerRef.current.textContent = `${
+        dayCheck ? "" : days + ":"
+      }${hours}:${minutes}:${seconds}`;
+
+      if (--timer < 0) {
+        btnRef.current.click();
+      }
+    }, 1000);
   };
 
   const Questions = () => {
@@ -126,10 +176,13 @@ export default function WithinTime({ data, qId }) {
   };
 
   const handleSubmit = () => {
-    let i = 0,
-      score = 0;
-    for (var option in options) {
-      if (options[option] === data[1][i].correctOp) score++;
+    let score = 0;
+    console.log(options);
+    for (let i = 1; i <= data[1].length; i++) {
+      if (!Object.keys(options).includes(`opt${i}`)) {
+        continue;
+      }
+      if (options[`opt${i}`] === data[1][i - 1].correctOp) score++;
     }
     api
       .put("scores/", { email, score })
@@ -217,9 +270,34 @@ export default function WithinTime({ data, qId }) {
                 </Grid>
               </>
             )}
+            {submitted && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100vw",
+                }}
+              >
+                <div
+                  ref={timerRef}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    width: "10%",
+                    backgroundColor: "blue",
+                    color: "whitesmoke",
+                    border: "2px solid lightblue",
+                    borderRadius: "10px",
+                    padding: "10px 20px",
+                    textAlign: "center",
+                  }}
+                ></div>
+              </div>
+            )}
             {submitted && Questions()}
             {submitted && (
               <Button
+                ref={btnRef}
                 variant="contained"
                 onClick={handleSubmit}
                 style={{ marginLeft: "20px" }}

@@ -113,6 +113,12 @@ const QuizGenerator = () => {
     for (var key in data) {
       if (!data[key]) {
         if (key === "timeD") continue;
+        if (
+          key === "timeH" &&
+          data.timeH === 0 &&
+          (data.timeM !== 0 || data.timeD !== 0)
+        )
+          continue;
         showToast("please fill all the data fields");
         return;
       }
@@ -121,6 +127,7 @@ const QuizGenerator = () => {
       qId: uuid(),
       questions: [data, qArrData],
       admin: localStorage.getItem("Admin"),
+      baseURL: window.location.origin,
     };
     console.log(totalData);
     api

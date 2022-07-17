@@ -34,6 +34,12 @@ const AdminWindow = () => {
       });
   }, []);
 
+  const setCurrId = (id, name) => {
+    localStorage.setItem("currId", id);
+    localStorage.setItem("currName", name);
+    navigate("/checkScores");
+  };
+
   return (
     <>
       {data.length !== 0 && (
@@ -46,6 +52,7 @@ const AdminWindow = () => {
                 <TableRow>
                   <TableCell>Quiz Name</TableCell>
                   <TableCell align="center">Link</TableCell>
+                  <TableCell align="center">Scores</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -62,6 +69,14 @@ const AdminWindow = () => {
                         {quiz.link}
                       </a>
                     </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        onClick={() => setCurrId(quiz.qId, quiz.quizName)}
+                      >
+                        Check Scores
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -77,13 +92,6 @@ const AdminWindow = () => {
             onClick={() => navigate("/quizGenerator")}
           >
             Create a new quiz
-          </Button>
-          <br />
-          <Button
-            variant="contained"
-            style={{ padding: "10px 16vw", margin: "30px" }}
-          >
-            Check Scores
           </Button>
         </div>
       </GridContainer>

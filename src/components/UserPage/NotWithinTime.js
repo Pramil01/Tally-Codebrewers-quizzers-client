@@ -7,7 +7,7 @@ const NotWithinTime = ({ startTime, endTime }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "Center",
-        height: "100vh",
+        height: "80vh",
         width: "40vw",
         margin: "0 auto",
         textAlign: "center",

@@ -10,6 +10,7 @@ import AdminWindow from "./components/AdminWindow";
 import QuizGenerator from "./components/QuizGenerator";
 import UserPage from "./components/UserPage";
 import UserNavbar from "./components/UserPage/UserNavbar";
+import Scores from "./components/Scores";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/adminWindow" element={<AdminWindow />} />
           <Route path="/quizGenerator" element={<QuizGenerator />} />
           <Route path="/takeQuiz" element={<UserPage />} />
+          <Route path="/checkScores" element={<Scores />} />
         </Routes>
       </div>
     </Router>

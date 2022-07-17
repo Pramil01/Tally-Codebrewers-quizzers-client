@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import NotWithinTime from "./NotWithinTime";
 import WithinTime from "./WithinTime";
 import api from "../../service/api";
+import moment from "moment-timezone";
 
 const UserPage = () => {
   const [searchParams] = useSearchParams();
@@ -33,7 +34,7 @@ const UserPage = () => {
     return { yyyy, mm, dd, HH, MM };
   };
   const checkValues = (start, curr, end) => {
-    return start < curr && curr < end
+    return start <= curr && curr < end
       ? "passed"
       : start === curr || end === curr
       ? "checkNext"
@@ -41,12 +42,8 @@ const UserPage = () => {
   };
   useEffect(() => {
     if (data.length === 0) return;
-    let today = new Date();
-    let yyyy = today.getFullYear();
-    let mm = today.getMonth() + 1;
-    let dd = today.getDate();
-    let HH = today.getHours();
-    let MM = today.getMinutes();
+    var currentTime = moment().tz("Asia/Kolkata").format();
+    let { yyyy, mm, dd, HH, MM } = formatDate(currentTime);
     let start = formatDate(data[0].startTime);
     let end = formatDate(data[0].endTime);
     if (checkValues(start.yyyy, yyyy, end.yyyy) === "failed")
