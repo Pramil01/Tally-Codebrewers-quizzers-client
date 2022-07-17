@@ -90,7 +90,9 @@ const UserPage = () => {
           endTime={data.length === 0 ? "" : data[0].endTime}
         />
       )}
-      {data.length !== 0 && withinTime && <WithinTime data={data} />}
+      {data.length !== 0 && withinTime && (
+        <WithinTime data={data} qId={searchParams.get("id")} />
+      )}
     </div>
   );
 };
